@@ -4,7 +4,7 @@ part of '../form_craft.dart';
 ///
 ///
 /// [onChanged] is a required callback that is called whenever the input value changes.
-/// [validators] is an optional list of [FormCraftFieldValidator] functions that are called whenever the input value changes.
+/// [validators] is an optional list of [FormCraftValidator] functions that are called whenever the input value changes.
 /// [initialValue] is an optional string that is used to set the initial value of the input.
 /// [globalKey] is a required key that is used to manage the state of the FormCraftTextField widget.
 /// [decorationBuilder] is an optional callback that provides custom decoration based on the validation error message.
@@ -15,13 +15,13 @@ class FormCraftTextField extends StatefulWidget {
   /// Required callback that is called whenever the input value changes.
   final Function(String value) onChanged;
 
-  /// An optional list of [FormCraftFieldValidator] functions that are called
+  /// An optional list of [FormCraftValidator] functions that are called
   ///
   ///
   /// whenever the input value changes.
   /// If the input value is invalid, the error message returned by the validator is displayed.
   /// If validators is null, the input value is considered valid.
-  final List<FormCraftFieldValidator>? validators;
+  final List<FormCraftValidator>? validators;
 
   /// An optional string that is used to set error message for the input.
   ///
@@ -179,7 +179,7 @@ class FormCraftTextFieldState extends State<FormCraftTextField> {
   late FocusNode _focusNode;
   String? _errorMessage;
   String? _customErrorMessage;
-  List<FormCraftFieldValidator>? _validators;
+  List<FormCraftValidator>? _validators;
   FormCraftValidationType _validateType = FormCraftValidationType.onSubmit;
 
   @override

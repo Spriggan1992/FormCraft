@@ -7,7 +7,7 @@ import 'dart:ui' as ui;
 
 import 'package:form_craft/form_craft.dart';
 
-import 'validation/validators/form_craft_field_validator.dart';
+import 'validation/validators/form_craft_validator.dart';
 
 part 'text_field/form_craft_text_field.dart';
 part 'text_field/form_craft_field_manager.dart';
@@ -111,6 +111,8 @@ class FormCraft {
   /// Sets the validation type for all FormCraftTextField widgets.
   ///
   /// The [type] is the validation type to be set for all fields.
+  /// It is necessary to set the validation type after build widgets to apply the changes.
+  /// Otherwise the default validation type will be not applied.
   void setValidationType(FormCraftValidationType type) {
     _validatorManager.setValidationType(type);
   }

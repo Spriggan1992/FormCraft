@@ -1,10 +1,10 @@
-import 'form_craft_field_validator.dart';
+part of 'form_craft_validator.dart';
 
 /// A custom validator for use with the FormCraft form validation framework.
 ///
-/// This class extends [FormCraftFieldValidator] and allows the definition of a custom validation rule
+/// This class extends [FormCraftValidator] and allows the definition of a custom validation rule
 /// based on a provided predicate function.
-class FormCraftCustomValidator extends FormCraftFieldValidator {
+class FormCraftCustomValidator implements FormCraftValidator {
   // The error message to be displayed when the validation fails.
   final String message;
 
@@ -16,17 +16,17 @@ class FormCraftCustomValidator extends FormCraftFieldValidator {
   /// The [message] parameter is the error message to be displayed when the validation fails.
   /// The [predicate] parameter is a function that takes an input value and returns a boolean indicating
   /// whether the input passes the custom validation rule.
-  FormCraftCustomValidator(
-    this.message,
-    this.predicate,
-  );
+  const FormCraftCustomValidator({
+    required this.message,
+    required this.predicate,
+  });
 
   /// Validates the provided [input] using the custom validation rule.
   ///
   /// The [input] parameter is the value to be validated.
   /// Returns the error message if the validation fails, otherwise returns null.
   @override
-  String? validate(String? input) {
+  String? validate(String input) {
     // Use the predicate function to determine if the input passes the custom validation rule.
     // If the predicate returns true, the validation is considered successful, and null is returned.
     // Otherwise, the error message is returned.

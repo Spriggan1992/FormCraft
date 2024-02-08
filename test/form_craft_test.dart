@@ -45,8 +45,8 @@ void main() {
                   (globalKey) => FormCraftTextField(
                     globalKey: globalKey,
                     onChanged: (value) {},
-                    validators: [
-                      FormCraftEmailValidator(),
+                    validators: const [
+                      FormCraftValidator.email(),
                     ],
                   ),
                 );
@@ -78,7 +78,9 @@ void main() {
                   (globalKey) => FormCraftTextField(
                     globalKey: globalKey,
                     onChanged: (value) {},
-                    validators: [RequiredFieldValidator()],
+                    validators: const [
+                      FormCraftValidator.required(),
+                    ],
                   ),
                 );
               },

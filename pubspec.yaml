@@ -1,7 +1,8 @@
 name: form_craft
-description: "A new Flutter package project."
-version: 0.0.1
-homepage:
+description: The FormCraft package simplifies form management in Flutter applications, providing a convenient set of utilities for building and interacting with forms.
+version: 0.0.3
+homepage: https://github.com/Spriggan1992/FormCraft/blob/main/README.md
+repository: https://github.com/Spriggan1992/FormCraft
 
 environment:
   sdk: '>=3.2.4 <4.0.0'
