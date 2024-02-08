@@ -3,11 +3,8 @@ library form_craft;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_form_craft/form_craft.dart';
 import 'dart:ui' as ui;
-
-import 'package:form_craft/form_craft.dart';
-
-import 'validation/validators/form_craft_validator.dart';
 
 part 'text_field/form_craft_text_field.dart';
 part 'text_field/form_craft_field_manager.dart';

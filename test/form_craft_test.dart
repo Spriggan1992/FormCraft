@@ -1,8 +1,8 @@
 library form_craft_test;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_form_craft/form_craft.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:form_craft/form_craft.dart';
 
 void main() {
   group('FormCraft Integration Tests', () {
