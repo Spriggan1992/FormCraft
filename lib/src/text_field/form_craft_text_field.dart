@@ -236,9 +236,13 @@ class FormCraftTextFieldState extends State<FormCraftTextField> {
       if (_validators == null) {
         return true;
       } else {
-        _reassignError(
-          _validators!.firstOrNull?.validate(_controller.text),
-        );
+        for (var validator in _validators!) {
+          _reassignError(validator.validate(_controller.text));
+
+          if (validator.validate(_controller.text) != null) {
+            break;
+          }
+        }
 
         return _errorMessage == null;
       }
