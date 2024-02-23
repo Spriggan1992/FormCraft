@@ -6,7 +6,7 @@ part of '../form_craft.dart';
 /// [onChanged] is a required callback that is called whenever the input value changes.
 /// [validators] is an optional list of [FormCraftValidator] functions that are called whenever the input value changes.
 /// [initialValue] is an optional string that is used to set the initial value of the input.
-/// [globalKey] is a required key that is used to manage the state of the FormCraftTextField widget.
+/// [formController] is a required key that is used to manage the state of the FormCraftTextField widget.
 /// [decorationBuilder] is an optional callback that provides custom decoration based on the validation error message.
 ///
 /// This widget is a wrapper around the [TextField] widget and provides additional functionality.
@@ -34,14 +34,15 @@ class FormCraftTextField extends StatefulWidget {
   /// If the initial value is not provided, the input will be empty.
   final String? initialValue;
 
-  /// A required key that is used to manage the state of the FormCraftTextField widget.
-  final Key globalKey;
-
   /// An optional callback that provides custom decoration based on the validation error message.
   ///
   /// It's necessary to provide the error message to the decorationBuilder function.
   /// Otherwise if the error message will not be displayed.
   final InputDecoration Function(String? errorMessage)? decorationBuilder;
+
+  /// Controller for managing the state of the FormCraftTextField widget.
+  final FormController formController;
+
   final UndoHistoryController? undoController;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
@@ -105,8 +106,7 @@ class FormCraftTextField extends StatefulWidget {
   final TextMagnifierConfiguration? magnifierConfiguration;
 
 // Constructor for initializing the FormCraftTextField.
-  const FormCraftTextField({
-    required this.globalKey,
+  FormCraftTextField({
     required this.onChanged,
     this.validators,
     this.initialValue,
@@ -168,7 +168,8 @@ class FormCraftTextField extends StatefulWidget {
     this.enableIMEPersonalizedLearning = true,
     this.canRequestFocus = true,
     this.customErrorMessage,
-  }) : super(key: globalKey);
+    required this.formController,
+  }) : super(key: formController.globalKey);
 
   @override
   State<FormCraftTextField> createState() => FormCraftTextFieldState();
@@ -186,18 +187,40 @@ class FormCraftTextFieldState extends State<FormCraftTextField> {
   void initState() {
     _validators = widget.validators;
     _customErrorMessage = widget.customErrorMessage;
-    _focusNode = FocusNode();
-    _controller = TextEditingController();
-    if (widget.initialValue != null) {
-      _controller.text = widget.initialValue ?? '';
-    }
+    _focusNode = widget.formController.focusNode;
+    _controller = widget.formController.controller;
+
+    widget.formController._setInitialValue(
+      widget.initialValue ?? '',
+      (value) {
+        _controller.text = value;
+      },
+    );
+    _errorMessage = widget.formController.errorMessage;
     super.initState();
   }
 
   @override
+  void didUpdateWidget(covariant FormCraftTextField oldWidget) {
+    // _focusNode = widget.formController.focusNode;
+    // _controller = widget.formController.controller;
+    // _errorMessage = widget.formController.errorMessage;
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void didChangeDependencies() {
+    _focusNode = widget.formController.focusNode;
+    _controller = widget.formController.controller;
+    _errorMessage = widget.formController.errorMessage;
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
-    _controller.dispose();
-    _focusNode.dispose();
+    if (!widget.formController.isPersistState) {
+      widget.formController._resetForm();
+    }
     super.dispose();
   }
 
@@ -207,16 +230,12 @@ class FormCraftTextFieldState extends State<FormCraftTextField> {
     });
   }
 
-// Reassigns the input value for the field.
-  void _reassignInput(String value) {
-    _controller.text = value;
-  }
-
 // Reassigns the validation error for the field.
   void _reassignError(String? value) {
     setState(() {
       _errorMessage = value;
     });
+    widget.formController._setErrorMessage(_errorMessage);
   }
 
 // Retrieves the current input value.

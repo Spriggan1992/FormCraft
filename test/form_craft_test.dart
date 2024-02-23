@@ -1,13 +1,19 @@
 library form_craft_test;
 
 import 'package:flutter/material.dart';
-import 'package:flutter_form_craft/form_craft.dart';
+import 'package:flutter_form_craft/src/form_craft.dart';
+import 'package:flutter_form_craft/src/validation/validators/form_craft_validator.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('FormCraft Integration Tests', () {
     testWidgets('Adding Fields', (WidgetTester tester) async {
-      final formCraftFieldManager = FormCraftFieldManager();
+      final formCraftFieldManager = FormCraftFieldManager(true);
+      final formCraft = FormCraft.test(
+        formCraftFieldManager,
+        FormCraftValidatorManager(formCraftFieldManager),
+      );
+
       const key = 'field_key';
       await tester.pumpWidget(
         MaterialApp(
@@ -16,8 +22,8 @@ void main() {
               builder: (context) {
                 return formCraftFieldManager.buildTextField(
                   key,
-                  (globalKey) => FormCraftTextField(
-                    globalKey: globalKey,
+                  (controller) => FormCraftTextField(
+                    formController: controller,
                     onChanged: (value) {},
                   ),
                 );
@@ -27,7 +33,7 @@ void main() {
         ),
       );
 
-      expect(formCraftFieldManager.fields.containsKey(key), true);
+      expect(formCraftFieldManager.controllers.containsKey(key), true);
     });
 
     testWidgets('Validation - Valid Input', (WidgetTester tester) async {
@@ -42,8 +48,8 @@ void main() {
               builder: (context) {
                 return formCraft.buildTextField(
                   key,
-                  (globalKey) => FormCraftTextField(
-                    globalKey: globalKey,
+                  (controller) => FormCraftTextField(
+                    formController: controller,
                     onChanged: (value) {},
                     validators: const [
                       FormCraftValidator.email(),
@@ -75,8 +81,8 @@ void main() {
               builder: (context) {
                 return formCraft.buildTextField(
                   key,
-                  (globalKey) => FormCraftTextField(
-                    globalKey: globalKey,
+                  (controller) => FormCraftTextField(
+                    formController: controller,
                     onChanged: (value) {},
                     validators: const [
                       FormCraftValidator.required(),
@@ -96,9 +102,8 @@ void main() {
     });
 
     testWidgets('Input Reassignment', (WidgetTester tester) async {
-      final fieldManager = FormCraftFieldManager();
-      final validatorManager =
-          FormCraftValidatorManager(fieldManager.globalKeys);
+      final fieldManager = FormCraftFieldManager(true);
+      final validatorManager = FormCraftValidatorManager(fieldManager);
 
       final formCraft = FormCraft.test(fieldManager, validatorManager);
 
@@ -112,8 +117,8 @@ void main() {
               builder: (context) {
                 return formCraft.buildTextField(
                   key,
-                  (globalKey) => FormCraftTextField(
-                    globalKey: globalKey,
+                  (controller) => FormCraftTextField(
+                    formController: controller,
                     onChanged: (value) {},
                     initialValue: initialValue,
                   ),
@@ -130,11 +135,12 @@ void main() {
       await tester.pump();
 
       // Verify that the input value has been updated
-      final inputFieldFinder = find.byKey(fieldManager.globalKeys[key]!);
+      final inputFieldFinder =
+          find.byKey(fieldManager.controllers[key]!.globalKey);
       expect(inputFieldFinder, findsOneWidget);
       await tester.pumpAndSettle();
       await tester.enterText(
-        find.byKey(fieldManager.globalKeys[key]!),
+        find.byKey(fieldManager.controllers[key]!.globalKey),
         newValue,
       );
       expect(find.text(newValue), findsOneWidget);

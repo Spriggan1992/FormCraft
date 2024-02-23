@@ -3,12 +3,16 @@ library form_craft;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_form_craft/form_craft.dart';
+
 import 'dart:ui' as ui;
+
+import 'validation/form_craft_validation_type.dart';
+import 'validation/validators/form_craft_validator.dart';
 
 part 'text_field/form_craft_text_field.dart';
 part 'text_field/form_craft_field_manager.dart';
 part 'validation/form_craft_validator_manager.dart';
+part 'text_field/form_controller.dart';
 
 /// A utility class that helps manage and interact with a collection of FormCraftTextField widgets.
 class FormCraft {
@@ -19,9 +23,11 @@ class FormCraft {
   late FormCraftValidatorManager _validatorManager;
 
   /// Create a new instance of FormCraft.
-  FormCraft() {
-    _fieldManager = FormCraftFieldManager();
-    _validatorManager = FormCraftValidatorManager(_fieldManager.globalKeys);
+  ///
+  /// The [isPersistState] parameter determines whether to persist the state of the FormCraftTextField widgets.
+  FormCraft({bool isPersistState = true}) {
+    _fieldManager = FormCraftFieldManager(isPersistState);
+    _validatorManager = FormCraftValidatorManager(_fieldManager);
   }
 
   /// Create a new instance of FormCraft for testing purposes.
@@ -29,9 +35,10 @@ class FormCraft {
   /// The [fieldManager] parameter is required and must be an instance of FormCraftFieldManager.
   /// The [validatorManager] parameter is required and must be an instance of FormCraftValidatorManager.
   @visibleForTesting
-  FormCraft.test(FormCraftFieldManager fieldManager,
-      FormCraftValidatorManager validatorManager)
-      : _fieldManager = fieldManager,
+  FormCraft.test(
+    FormCraftFieldManager fieldManager,
+    FormCraftValidatorManager validatorManager,
+  )   : _fieldManager = fieldManager,
         _validatorManager = validatorManager;
 
   /// Builds a FormCraftTextField widget with the specified key and configuration.
@@ -45,7 +52,7 @@ class FormCraft {
   Widget buildTextField(
     String key,
     Widget Function(
-      GlobalKey<FormCraftTextFieldState> globalKey,
+      FormController formController,
     ) textField,
   ) {
     return _fieldManager.buildTextField(key, textField);

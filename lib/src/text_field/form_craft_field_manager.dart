@@ -2,22 +2,29 @@ part of '../form_craft.dart';
 
 /// A class that provides a set of utility methods for managing and interacting with a collection of FormCraftTextField widgets.
 base class FormCraftFieldManager {
-  /// Map of field keys to corresponding FormCraftTextField widgets.
-  Map<String, Widget> get fields => _fields;
+  /// A flag that determines whether to persist the state of the FormCraftTextField widgets.
+  late final bool _isPersistState;
 
-  /// Internal map to store FormCraftTextField widgets using their keys.
-  final Map<String, Widget> _fields = {};
-
-  /// Map of field keys to their associated global keys for state management.
-  final Map<String, GlobalKey<FormCraftTextFieldState>> globalKeys = {};
-
-  FormCraftFieldManager();
-
-  /// Adds a FormCraftTextField widget to the internal map using the specified key.
+  /// A map that stores the FormCraftTextField controllers.
   ///
-  /// The reason to make this method public only for testing purposes.
-  void addGlobalKey(String key, GlobalKey<FormCraftTextFieldState> globalKey) {
-    globalKeys[key] = globalKey;
+  /// The key is the unique identifier of the FormCraftTextField widget.
+  /// The value is the FormCraftTextField controller.
+  /// The [FormController] class is responsible for managing the state of the FormCraftTextField widget.
+  final Map<String, FormController> controllers = {};
+
+  FormCraftFieldManager(bool isPersistState) {
+    _isPersistState = isPersistState;
+  }
+
+  /// Adds a FormCraftTextField controller to the internal map.
+  ///
+  /// The [key] is the unique identifier of the FormCraftTextField widget.
+  /// The [formController] is the FormCraftTextField controller.
+  void addFormController(
+    String key,
+    FormController formController,
+  ) {
+    controllers[key] = formController;
   }
 
   /// Builds a FormCraftTextField widget with the specified key and configuration.
@@ -31,24 +38,31 @@ base class FormCraftFieldManager {
   Widget buildTextField(
     String key,
     Widget Function(
-      GlobalKey<FormCraftTextFieldState> globalKey,
+      FormController formController,
     ) textField,
   ) {
-    if (fields.keys.contains(key)) {
-      return _fields[key]!;
+    final isContainKey = controllers.keys.contains(key);
+    if (isContainKey) {
+      return textField(controllers[key]!);
     }
 
     // Create a new global key for state management
     final globalKey = GlobalKey<FormCraftTextFieldState>();
 
+    // Create a new FormCraftTextField controller
+    final formController = FormController(
+      controller: TextEditingController(),
+      focusNode: FocusNode(),
+      globalKey: globalKey,
+      isPersistState: _isPersistState,
+    );
+
     // Create the FormCraftTextField widget using the provided function
-    var textFieldWidget = textField(globalKey);
+    var textFieldWidget = textField(formController);
 
     // Add the new widget to the internal map
-    _fields[key] = textFieldWidget;
-
-    // Add the new global key to the map for state management
-    globalKeys[key] = globalKey;
+    // _fields[key] = textFieldWidget;
+    controllers[key] = formController;
 
     // Return the created FormCraftTextField widget
     return textFieldWidget;
@@ -63,7 +77,7 @@ base class FormCraftFieldManager {
     _checkIfKeyExist(key);
 
     // Call the private method to reassign the input value for the specified field
-    globalKeys[key]!.currentState!._reassignInput(value);
+    controllers[key]!.controller.text = value;
   }
 
   /// Gets [FocusNode] for a specific field.
@@ -72,7 +86,8 @@ base class FormCraftFieldManager {
   FocusNode getFocusNode(String key) {
     _checkIfKeyExist(key);
 
-    return globalKeys[key]!.currentState!._focusNode;
+    // return controllers[key]!.globalKey.currentState!._focusNode;
+    return controllers[key]!.focusNode;
   }
 
   /// Submits the values of all FormCraftTextField widgets.
@@ -83,11 +98,16 @@ base class FormCraftFieldManager {
     final items = <String, String>{};
 
     // Iterate through each field and get its input value
-    globalKeys.forEach((key, globalKey) {
+    controllers.forEach((key, formController) {
       items.addAll(
-        {key: globalKey.currentState?._getInputValue() ?? ''},
+        {key: formController.controller.text},
       );
     });
+    // globalKeys.forEach((key, globalKey) {
+    //   items.addAll(
+    //     {key: globalKey.currentState?._getInputValue() ?? ''},
+    //   );
+    // });
 
     // Return the map of field keys and their input values
     return items;
@@ -98,9 +118,12 @@ base class FormCraftFieldManager {
   /// Calls the _refreshForm method for each FormCraftTextField widget, if available.
   void refreshForm() {
     // Iterate through each field and call the private method to refresh its state
-    globalKeys.forEach((key, globalKey) {
-      globalKey.currentState?._refreshForm();
+    controllers.forEach((key, formController) {
+      formController.globalKey.currentState?._refreshForm();
     });
+    // globalKeys.forEach((key, globalKey) {
+    //   globalKey.currentState?._refreshForm();
+    // });
   }
 
   /// Sets a custom error message for a specific field.
@@ -116,7 +139,7 @@ base class FormCraftFieldManager {
     _checkIfKeyExist(key);
 
     // Call the private method to assign a custom error message for the specified field
-    globalKeys[key]!.currentState!._assignCustomError(
+    controllers[key]!.globalKey.currentState!._assignCustomError(
           errorMessage,
           isRedrawState,
         );
@@ -125,13 +148,16 @@ base class FormCraftFieldManager {
   /// Disposes of all resources and clears the field and global key maps.
   void dispose() {
     // Clear the internal maps to release resources
-    _fields.clear();
-    globalKeys.clear();
+    controllers.forEach((key, formController) {
+      formController.controller.dispose();
+      formController.focusNode.dispose();
+    });
+    controllers.clear();
   }
 
   // Checks if a field with the given key exists in the internal map.
   void _checkIfKeyExist(String key) {
-    if (!fields.keys.contains(key)) {
+    if (!controllers.keys.contains(key)) {
       throw 'The key $key does not exist';
     }
   }
