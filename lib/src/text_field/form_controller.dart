@@ -14,7 +14,7 @@ base class FormController {
   final FocusNode focusNode;
 
   /// The global key for state management of the FormCraftTextField widget.
-  GlobalKey<FormCraftTextFieldState> get globalKey => _globalKey;
+  final GlobalKey<FormCraftTextFieldState> globalKey;
 
   /// A flag that determines whether to persist the state of the FormCraftTextField widget.
   final bool isPersistState;
@@ -30,17 +30,12 @@ base class FormController {
   String? _initialValue;
   String? _errorMessage;
 
-  late GlobalKey<FormCraftTextFieldState> _globalKey;
-
   FormController({
+    required this.globalKey,
     required this.controller,
     required this.focusNode,
     required this.isPersistState,
   });
-
-  void _resetGlobalKey(GlobalKey<FormCraftTextFieldState> globalKey) {
-    _globalKey = globalKey;
-  }
 
   void _setInitialValue(
     String value,

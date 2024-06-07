@@ -121,6 +121,10 @@ class FormCraft {
     _validatorManager.setValidationType(type);
   }
 
+  void disposeField(String key) {
+    _fieldManager.disposeSpecificTextField(key);
+  }
+
   /// Disposes of all resources and clears the field and global key maps.
   void dispose() {
     _fieldManager.dispose();
