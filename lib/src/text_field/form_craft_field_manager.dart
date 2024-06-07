@@ -158,8 +158,8 @@ base class FormCraftFieldManager {
 
   void disposeSpecificTextField(String key) {
     controllers.clear();
-    controllers[key]!.focusNode.dispose();
-    controllers[key]!.controller.dispose();
+    controllers[key]?.focusNode.dispose();
+    controllers[key]?.controller.dispose();
   }
 
   // Checks if a field with the given key exists in the internal map.
