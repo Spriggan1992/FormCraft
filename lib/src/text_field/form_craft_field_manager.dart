@@ -47,7 +47,8 @@ base class FormCraftFieldManager {
     }
 
     // Create a new global key for state management
-    final globalKey = GlobalKey<FormCraftTextFieldState>();
+    final globalKey =
+        controllers[key]?.globalKey ?? GlobalKey<FormCraftTextFieldState>();
 
     // Create a new FormCraftTextField controller
     final formController = FormController(
