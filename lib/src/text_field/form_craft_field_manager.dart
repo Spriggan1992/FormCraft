@@ -43,7 +43,8 @@ base class FormCraftFieldManager {
   ) {
     final isContainKey = controllers.keys.contains(key);
     if (isContainKey) {
-      return textField(controllers[key]!);
+      return textField(controllers[key]!
+        .._resetGlobalKey(GlobalKey<FormCraftTextFieldState>()));
     }
 
     // Create a new global key for state management
@@ -54,9 +55,8 @@ base class FormCraftFieldManager {
     final formController = FormController(
       controller: TextEditingController(),
       focusNode: FocusNode(),
-      globalKey: globalKey,
       isPersistState: _isPersistState,
-    );
+    ).._resetGlobalKey(globalKey);
 
     // Create the FormCraftTextField widget using the provided function
     var textFieldWidget = textField(formController);
