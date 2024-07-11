@@ -6,7 +6,7 @@ part 'form_craft_required_field_validator.dart';
 ///
 /// Extend this class to create custom validators for your form fields.
 /// The [validate] method should return an error message if validation fails,
-class FormCraftValidator {
+abstract class FormCraftValidator {
   const FormCraftValidator();
 
   /// Validates the given input and returns an error message if validation fails.
