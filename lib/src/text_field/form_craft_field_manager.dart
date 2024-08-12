@@ -12,8 +12,23 @@ base class FormCraftFieldManager {
   /// The [FormController] class is responsible for managing the state of the FormCraftTextField widget.
   final Map<String, FormController> controllers = {};
 
-  FormCraftFieldManager(bool isPersistState) {
+  FormCraftFieldManager(
+    bool isPersistState, [
+    List<String> preRegisteredFields = const [],
+  ]) {
     _isPersistState = isPersistState;
+    if (preRegisteredFields.isNotEmpty) {
+      for (var key in preRegisteredFields) {
+        addFormController(
+            key,
+            FormController(
+              controller: TextEditingController(),
+              focusNode: FocusNode(),
+              globalKey: GlobalKey<FormCraftTextFieldState>(),
+              isPersistState: _isPersistState,
+            ));
+      }
+    }
   }
 
   /// Adds a FormCraftTextField controller to the internal map.

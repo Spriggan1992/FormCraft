@@ -25,8 +25,11 @@ class FormCraft {
   /// Create a new instance of FormCraft.
   ///
   /// The [isPersistState] parameter determines whether to persist the state of the FormCraftTextField widgets.
-  FormCraft({bool isPersistState = true}) {
-    _fieldManager = FormCraftFieldManager(isPersistState);
+  FormCraft({
+    bool isPersistState = true,
+    List<String> preRegisteredFields = const [],
+  }) {
+    _fieldManager = FormCraftFieldManager(isPersistState, preRegisteredFields);
     _validatorManager = FormCraftValidatorManager(_fieldManager);
   }
 
