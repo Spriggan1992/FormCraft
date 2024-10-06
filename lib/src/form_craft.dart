@@ -73,8 +73,12 @@ class FormCraft {
   /// The [key] parameter is required and must be the key of an existing field.
   /// The [value] parameter is required and must be a string.
   /// Updates the input value of the FormCraftTextField associated with the specified key.
-  void reassignInputValue(String key, String value) {
-    _fieldManager.reassignInputValue(key, value);
+  void reassignInputValue(
+    String key,
+    String value, {
+    bool isRevalidate = false,
+  }) {
+    _fieldManager.reassignInputValue(key, value, isRevalidate);
   }
 
   /// Gets [FocusNode] for a specific field.

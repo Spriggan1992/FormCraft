@@ -91,9 +91,9 @@ base class FormCraftFieldManager {
   /// Updates the input value of the FormCraftTextField associated with the specified key.
   void reassignInputValue(
     String key,
-    String value, {
+    String value, [
     bool isRevalidate = false,
-  }) {
+  ]) {
     _checkIfKeyExist(key);
 
     // Call the private method to reassign the input value for the specified field
