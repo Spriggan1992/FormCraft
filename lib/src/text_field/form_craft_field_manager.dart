@@ -89,11 +89,18 @@ base class FormCraftFieldManager {
   /// The [key] parameter is required and must be the key of an existing field.
   /// The [value] parameter is required and must be a string.
   /// Updates the input value of the FormCraftTextField associated with the specified key.
-  void reassignInputValue(String key, String value) {
+  void reassignInputValue(
+    String key,
+    String value, {
+    bool isRevalidate = false,
+  }) {
     _checkIfKeyExist(key);
 
     // Call the private method to reassign the input value for the specified field
     controllers[key]!.controller.text = value;
+    if (isRevalidate) {
+      controllers[key]!.globalKey.currentState!.validate();
+    }
   }
 
   /// Gets [FocusNode] for a specific field.
