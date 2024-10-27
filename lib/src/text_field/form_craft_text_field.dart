@@ -332,7 +332,9 @@ class FormCraftTextFieldState extends State<FormCraftTextField> {
       onEditingComplete: widget.onEditingComplete,
       onSubmitted: widget.onSubmitted,
       onAppPrivateCommand: widget.onAppPrivateCommand,
-      inputFormatters: widget.inputFormatters,
+      inputFormatters: [
+        if (widget.mask == null) ...widget.inputFormatters ?? []
+      ],
       enabled: widget.enabled,
       cursorWidth: widget.cursorWidth,
       cursorHeight: widget.cursorHeight,

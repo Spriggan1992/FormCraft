@@ -7,7 +7,7 @@ class PersistentMask {
 
   PersistentMask({
     required this.maskPattern,
-    required this.maskTextStyle,
-    required this.inputTextStyle,
+    this.maskTextStyle,
+    this.inputTextStyle,
   });
 }
