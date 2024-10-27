@@ -27,9 +27,13 @@ class PersistentMask {
       inputTextStyle: inputTextStyle,
       validator: FormCraftValidator.custom(
           message: message,
-          predicate: (input) => validateEmpty
-              ? input!.length == maskPattern.length
-              : (input!.isNotEmpty && input.length == maskPattern.length)),
+          predicate: (input) {
+            if (validateEmpty) {
+              return input!.length == maskPattern.length;
+            } else {
+              return input!.isEmpty ? true : input.length == maskPattern.length;
+            }
+          }),
     );
   }
 }
