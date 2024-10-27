@@ -3,6 +3,7 @@ library form_craft;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_form_craft/src/masks/persistent_mask.dart';
 
 import 'dart:ui' as ui;
 
