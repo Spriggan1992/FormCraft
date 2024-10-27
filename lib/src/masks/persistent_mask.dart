@@ -13,4 +13,20 @@ class PersistentMask {
     this.inputTextStyle,
     this.validator,
   });
+
+  factory PersistentMask.defaultValidator({
+    required String maskPattern,
+    TextStyle? maskTextStyle,
+    TextStyle? inputTextStyle,
+    final String message = 'Invalid value',
+  }) {
+    return PersistentMask(
+      maskPattern: maskPattern,
+      maskTextStyle: maskTextStyle,
+      inputTextStyle: inputTextStyle,
+      validator: FormCraftValidator.custom(
+          message: message,
+          predicate: (input) => input!.length == maskPattern.length),
+    );
+  }
 }
