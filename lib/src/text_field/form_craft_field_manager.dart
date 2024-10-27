@@ -22,11 +22,10 @@ base class FormCraftFieldManager {
         addFormController(
             key,
             FormController(
-              controller: TextEditingController(),
               focusNode: FocusNode(),
               globalKey: GlobalKey<FormCraftTextFieldState>(),
               isPersistState: _isPersistState,
-            ));
+            ).._controller = TextEditingController());
       }
     }
   }
@@ -67,11 +66,10 @@ base class FormCraftFieldManager {
 
     // Create a new FormCraftTextField controller
     final formController = FormController(
-      controller: TextEditingController(),
       focusNode: FocusNode(),
       globalKey: globalKey,
       isPersistState: _isPersistState,
-    );
+    ).._controller = TextEditingController();
 
     // Create the FormCraftTextField widget using the provided function
     var textFieldWidget = textField(formController);
@@ -82,6 +80,16 @@ base class FormCraftFieldManager {
 
     // Return the created FormCraftTextField widget
     return textFieldWidget;
+  }
+
+  void _changeTextEditingControllerToMaskedTextController(
+    String key,
+    PersistentMask mask,
+  ) {
+    var formController = controllers[key];
+    final textValue = formController?.controller.text;
+    formController?._controller = MaskedTextController(mask)
+      ..text = textValue ?? '';
   }
 
   /// Reassigns the input value for a specific field.

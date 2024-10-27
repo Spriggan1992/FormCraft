@@ -104,8 +104,9 @@ class FormCraftTextField extends StatefulWidget {
   final bool canRequestFocus;
   final SpellCheckConfiguration? spellCheckConfiguration;
   final TextMagnifierConfiguration? magnifierConfiguration;
+  final PersistentMask? mask;
 
-// Constructor for initializing the FormCraftTextField.
+  /// Constructor for initializing the FormCraftTextField.
   FormCraftTextField({
     required this.onChanged,
     this.validators,
@@ -169,6 +170,7 @@ class FormCraftTextField extends StatefulWidget {
     this.canRequestFocus = true,
     this.customErrorMessage,
     required this.formController,
+    this.mask,
   }) : super(key: formController.globalKey);
 
   @override
@@ -188,6 +190,9 @@ class FormCraftTextFieldState extends State<FormCraftTextField> {
     _validators = widget.validators;
     _customErrorMessage = widget.customErrorMessage;
     _focusNode = widget.formController.focusNode;
+    if (widget.mask != null) {
+      widget.formController.setController(MaskedTextController(widget.mask!));
+    }
     _controller = widget.formController.controller;
 
     widget.formController._setInitialValue(

@@ -7,9 +7,6 @@ part of '../form_craft.dart';
 /// The [focusNode] responsible for managing keyboard focus and to handle keyboard events.
 /// The [globalKey] responsible for managing the state of the FormCraftTextField widget.
 base class FormController {
-  /// The controller for the FormCraftTextField widget.
-  final TextEditingController controller;
-
   /// The focus node for the FormCraftTextField widget.
   final FocusNode focusNode;
 
@@ -25,17 +22,24 @@ base class FormController {
   // The error message of the FormCraftTextField widget.
   String? get errorMessage => _errorMessage;
 
+  /// The controller for the FormCraftTextField widget.
+  TextEditingController get controller => _controller;
+
   // A flag that determines whether the FormCraftTextField widget has been initialized.
   bool _isInit = false;
   String? _initialValue;
   String? _errorMessage;
+  late TextEditingController _controller;
 
   FormController({
     required this.globalKey,
-    required this.controller,
     required this.focusNode,
     required this.isPersistState,
   });
+
+  void setController(TextEditingController controller) {
+    _controller = controller;
+  }
 
   void _setInitialValue(
     String value,

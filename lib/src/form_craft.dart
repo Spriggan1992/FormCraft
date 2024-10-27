@@ -13,6 +13,7 @@ part 'text_field/form_craft_text_field.dart';
 part 'text_field/form_craft_field_manager.dart';
 part 'validation/form_craft_validator_manager.dart';
 part 'text_field/form_controller.dart';
+part 'masks/form_craft_mask_text_editing_controller.dart';
 
 /// A utility class that helps manage and interact with a collection of FormCraftTextField widgets.
 class FormCraft {
@@ -37,7 +38,6 @@ class FormCraft {
   ///
   /// The [fieldManager] parameter is required and must be an instance of FormCraftFieldManager.
   /// The [validatorManager] parameter is required and must be an instance of FormCraftValidatorManager.
-  @visibleForTesting
   FormCraft.test(
     FormCraftFieldManager fieldManager,
     FormCraftValidatorManager validatorManager,
