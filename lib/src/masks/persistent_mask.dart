@@ -19,6 +19,7 @@ class PersistentMask {
     TextStyle? maskTextStyle,
     TextStyle? inputTextStyle,
     final String message = 'Invalid value',
+    final bool validateEmpty = true,
   }) {
     return PersistentMask(
       maskPattern: maskPattern,
@@ -26,7 +27,9 @@ class PersistentMask {
       inputTextStyle: inputTextStyle,
       validator: FormCraftValidator.custom(
           message: message,
-          predicate: (input) => input!.length == maskPattern.length),
+          predicate: (input) => validateEmpty
+              ? input!.length == maskPattern.length
+              : (input!.isNotEmpty && input.length == maskPattern.length)),
     );
   }
 }
