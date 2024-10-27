@@ -187,7 +187,10 @@ class FormCraftTextFieldState extends State<FormCraftTextField> {
 
   @override
   void initState() {
-    _validators = widget.validators;
+    _validators = [
+      if (widget.mask?.validator != null) widget.mask!.validator!,
+      ...widget.validators ?? []
+    ];
     _customErrorMessage = widget.customErrorMessage;
     _focusNode = widget.formController.focusNode;
     if (widget.mask != null) {
@@ -333,7 +336,8 @@ class FormCraftTextFieldState extends State<FormCraftTextField> {
       onSubmitted: widget.onSubmitted,
       onAppPrivateCommand: widget.onAppPrivateCommand,
       inputFormatters: [
-        if (widget.mask == null) ...widget.inputFormatters ?? []
+        if (widget.mask != null) MaskedInputFormatter(widget.mask!.maskPattern),
+        ...widget.inputFormatters ?? []
       ],
       enabled: widget.enabled,
       cursorWidth: widget.cursorWidth,
