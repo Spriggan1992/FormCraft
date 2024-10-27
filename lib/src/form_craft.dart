@@ -3,12 +3,12 @@ library form_craft;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_form_craft/src/masks/persistent_mask.dart';
 
 import 'dart:ui' as ui;
 
 import 'validation/form_craft_validation_type.dart';
 import 'validation/validators/form_craft_validator.dart';
+import 'masks/persistent_mask.dart';
 
 part 'text_field/form_craft_text_field.dart';
 part 'text_field/form_craft_field_manager.dart';
