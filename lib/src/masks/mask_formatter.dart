@@ -15,7 +15,7 @@ class _Separator {
 class MaskedInputFormatter extends TextInputFormatter {
   final String mask;
 
-  final String _anyCharMask = '#';
+  final String _anyCharMask = 'x';
   final String _onlyDigitMask = '0';
   final RegExp? allowedCharMatcher;
   final List<_Separator> _separators = [];
